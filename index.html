@@ -2,238 +2,615 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="description" content="Chevalier & Roth – Zeitlose Luxusmode aus Berlin.">
 <title>Chevalier &amp; Roth – Maison de Mode</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Josefin+Sans:wght@100;300;400&display=swap" rel="stylesheet">
-<!-- Appwrite SDK -->
 <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.js"></script>
 <style>
-:root{--gold:#AE9666;--gold-light:#C8AE88;--gold-dark:#8A7252;--black:#0A0A0A;--black-soft:#141414;--black-card:#1A1A1A;--white:#F5F0E8;--gray:#888;}
-*{margin:0;padding:0;box-sizing:border-box;}
+/* ════════ VARIABLES ════════ */
+:root{
+  --gold:#AE9666;
+  --gold-light:#C8AE88;
+  --gold-dark:#8A7252;
+  --black:#0A0A0A;
+  --black-soft:#141414;
+  --black-card:#1A1A1A;
+  --white:#F5F0E8;
+  --gray:#888;
+  --hh:68px; /* header height */
+}
+
+/* ════════ RESET ════════ */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html{scroll-behavior:smooth;}
-body{background:var(--black);color:var(--white);font-family:'Josefin Sans',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden;}
+body{
+  background:var(--black);color:var(--white);
+  font-family:'Josefin Sans',sans-serif;font-weight:300;
+  min-height:100vh;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
 
-/* ── HEADER ── */
-header{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10,10,10,0.96);border-bottom:1px solid rgba(174,150,102,0.3);padding:0 2.5rem;height:72px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(12px);}
-.logo-area{display:flex;align-items:center;gap:14px;cursor:pointer;text-decoration:none;}
-.logo-img{height:46px;width:auto;object-fit:contain;}
-.logo-placeholder{width:46px;height:46px;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold);font-style:italic;}
-.logo-text{font-family:'Cormorant Garamond',serif;font-size:1.3rem;letter-spacing:4px;color:var(--gold);font-weight:300;line-height:1.2;}
-.logo-text small{display:block;font-size:.52rem;letter-spacing:6px;opacity:.65;}
-.header-right{display:flex;align-items:center;gap:1.2rem;}
-.header-user{font-size:.58rem;letter-spacing:2px;color:var(--gold);display:none;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.cart-btn{background:none;border:1px solid rgba(174,150,102,0.4);color:var(--gold);padding:8px 16px;font-family:'Josefin Sans',sans-serif;font-size:.65rem;letter-spacing:2px;cursor:pointer;transition:all .3s;display:flex;align-items:center;gap:7px;}
-.cart-btn:hover{background:rgba(174,150,102,0.1);border-color:var(--gold);}
-.cart-count{background:var(--gold);color:var(--black);border-radius:50%;width:18px;height:18px;font-size:.58rem;display:flex;align-items:center;justify-content:center;}
-.hamburger{display:flex;flex-direction:column;gap:5px;cursor:pointer;padding:5px;background:none;border:none;}
-.hamburger span{display:block;width:26px;height:1.5px;background:var(--gold);transition:all .35s;}
-.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
-.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
-.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+/* ════════ HEADER ════════ */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:900;
+  background:rgba(10,10,10,0.96);
+  border-bottom:1px solid rgba(174,150,102,0.2);
+  height:var(--hh);
+  display:flex;align-items:center;
+  justify-content:space-between;
+  padding:0 clamp(1rem,5vw,2.5rem);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  transition:box-shadow .3s;
+}
+header.scrolled{box-shadow:0 2px 30px rgba(0,0,0,0.6);}
 
-/* ── NAV ── */
-.nav-overlay{position:fixed;top:72px;left:0;right:0;bottom:0;background:rgba(10,10,10,0.98);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem;transform:translateX(-100%);transition:transform .55s cubic-bezier(.77,0,.18,1);}
+.logo-area{
+  display:flex;align-items:center;gap:10px;
+  text-decoration:none;flex-shrink:0;
+}
+.logo-img{height:clamp(34px,5vw,44px);width:auto;object-fit:contain;}
+.logo-placeholder{
+  width:clamp(34px,5vw,44px);height:clamp(34px,5vw,44px);
+  border:1.5px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(.9rem,2vw,1.1rem);color:var(--gold);font-style:italic;
+}
+.logo-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(.95rem,2.2vw,1.3rem);
+  letter-spacing:clamp(2px,1vw,4px);
+  color:var(--gold);font-weight:300;line-height:1.15;
+}
+.logo-text small{
+  display:block;
+  font-size:clamp(.38rem,.7vw,.52rem);
+  letter-spacing:clamp(3px,1vw,5px);opacity:.6;
+}
+
+.hdr-right{display:flex;align-items:center;gap:clamp(.5rem,2vw,1.2rem);}
+.hdr-user{
+  font-size:.56rem;letter-spacing:2px;color:var(--gold);
+  display:none;max-width:90px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+
+.cart-btn{
+  display:flex;align-items:center;gap:6px;
+  background:none;border:1px solid rgba(174,150,102,0.35);
+  color:var(--gold);padding:7px clamp(8px,2vw,14px);
+  font-family:'Josefin Sans',sans-serif;
+  font-size:clamp(.55rem,.9vw,.65rem);letter-spacing:2px;
+  cursor:pointer;transition:all .3s;white-space:nowrap;
+}
+.cart-btn:hover,.cart-btn:focus{background:rgba(174,150,102,0.08);border-color:var(--gold);outline:none;}
+.cart-count{
+  background:var(--gold);color:var(--black);
+  border-radius:50%;min-width:17px;height:17px;
+  font-size:.52rem;display:flex;align-items:center;justify-content:center;
+  padding:0 2px;
+}
+/* Hide label on tiny screens */
+@media(max-width:400px){.cart-label{display:none;}}
+
+/* ════════ HAMBURGER ════════ */
+.hamburger{
+  display:flex;flex-direction:column;justify-content:center;
+  align-items:flex-end;gap:5px;
+  cursor:pointer;padding:8px;
+  background:none;border:none;
+  width:42px;height:42px;
+  flex-shrink:0;z-index:1100;
+  position:relative;
+}
+.hamburger span{
+  display:block;height:1.5px;
+  background:var(--gold);
+  border-radius:2px;
+  transition:transform .42s cubic-bezier(.77,0,.18,1),
+             opacity .28s ease,
+             width .3s ease;
+  transform-origin:center;
+}
+.hamburger span:nth-child(1){width:24px;}
+.hamburger span:nth-child(2){width:16px;}
+.hamburger span:nth-child(3){width:24px;}
+/* Open state */
+.hamburger.open span:nth-child(1){width:24px;transform:translateY(6.5px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;width:0;}
+.hamburger.open span:nth-child(3){width:24px;transform:translateY(-6.5px) rotate(-45deg);}
+
+/* ════════ NAV OVERLAY ════════ */
+.nav-overlay{
+  position:fixed;inset:0;
+  background:rgba(7,7,7,0.99);
+  z-index:1000;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:var(--hh) 2rem 2rem;
+  gap:0;
+  transform:translateX(-100%);
+  transition:transform .55s cubic-bezier(.77,0,.18,1);
+  overflow-y:auto;
+}
 .nav-overlay.open{transform:translateX(0);}
-.nav-link{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,4.5vw,3rem);font-weight:300;color:rgba(245,240,232,0.45);text-decoration:none;letter-spacing:8px;padding:.6rem 0;transition:color .3s;}
-.nav-link:hover{color:var(--gold);}
-.nav-div{width:1px;height:24px;background:rgba(174,150,102,0.18);margin:.2rem 0;}
-.nav-sub{display:flex;gap:1.5rem;margin-top:.8rem;flex-wrap:wrap;justify-content:center;}
-.nav-sub a{font-size:.58rem;letter-spacing:3px;color:var(--gray);text-decoration:none;transition:color .3s;}
+/* thin gold line at top */
+.nav-overlay::after{
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:var(--hh);
+  border-bottom:1px solid rgba(174,150,102,0.15);
+  pointer-events:none;
+}
+
+.nav-item{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.7rem,7vw,3.2rem);
+  font-weight:300;
+  color:rgba(245,240,232,0.35);
+  text-decoration:none;letter-spacing:clamp(4px,2vw,8px);
+  padding:.6rem 0;
+  display:block;text-align:center;width:100%;
+  transition:color .3s,letter-spacing .3s;
+  cursor:pointer;
+  position:relative;
+}
+.nav-item::after{
+  content:'';position:absolute;bottom:0;left:50%;
+  width:0;height:1px;background:var(--gold);
+  transition:width .35s,left .35s;
+}
+.nav-item:hover,.nav-item:focus{color:var(--gold);letter-spacing:clamp(5px,2.5vw,10px);outline:none;}
+.nav-item:hover::after,.nav-item:focus::after{width:40px;left:calc(50% - 20px);}
+
+.nav-divider{
+  width:1px;height:clamp(16px,3vh,26px);
+  background:rgba(174,150,102,0.18);
+  margin:.3rem auto;
+}
+.nav-sub{
+  display:flex;gap:clamp(.8rem,3vw,2rem);
+  margin-top:1.5rem;flex-wrap:wrap;justify-content:center;
+}
+.nav-sub a{
+  font-size:clamp(.52rem,.9vw,.6rem);
+  letter-spacing:3px;color:var(--gray);
+  text-decoration:none;transition:color .3s;
+}
 .nav-sub a:hover{color:var(--gold);}
 
-/* ── HERO ── */
-.hero{height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0A0A0A 0%,#110f0a 50%,#0A0A0A 100%);}
-.hero-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;background:radial-gradient(ellipse,rgba(174,150,102,0.07) 0%,transparent 68%);pointer-events:none;}
-.hero-frame{position:absolute;inset:44px;border:1px solid rgba(174,150,102,0.07);pointer-events:none;}
-.hero-frame::before{content:'';position:absolute;top:-1px;left:-1px;width:44px;height:44px;border-top:1px solid rgba(174,150,102,0.45);border-left:1px solid rgba(174,150,102,0.45);}
-.hero-frame::after{content:'';position:absolute;bottom:-1px;right:-1px;width:44px;height:44px;border-bottom:1px solid rgba(174,150,102,0.45);border-right:1px solid rgba(174,150,102,0.45);}
-.hero-content{text-align:center;z-index:1;padding:2rem;}
-.hero-eyebrow{font-size:.58rem;letter-spacing:8px;color:var(--gold);margin-bottom:2rem;opacity:.8;}
-.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,9vw,8rem);font-weight:300;line-height:.88;letter-spacing:8px;margin-bottom:2.5rem;}
+/* ════════ HERO ════════ */
+.hero{
+  height:100svh;min-height:500px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0A0A0A 0%,#100e09 50%,#0A0A0A 100%);}
+.hero-glow{
+  position:absolute;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  width:clamp(300px,70vw,700px);height:clamp(300px,70vw,700px);
+  background:radial-gradient(ellipse,rgba(174,150,102,.07) 0%,transparent 68%);
+  pointer-events:none;
+}
+.hero-frame{position:absolute;inset:clamp(16px,4vw,44px);border:1px solid rgba(174,150,102,.07);pointer-events:none;}
+.hero-frame::before{
+  content:'';position:absolute;top:-1px;left:-1px;
+  width:clamp(20px,5vw,44px);height:clamp(20px,5vw,44px);
+  border-top:1px solid rgba(174,150,102,.45);
+  border-left:1px solid rgba(174,150,102,.45);
+}
+.hero-frame::after{
+  content:'';position:absolute;bottom:-1px;right:-1px;
+  width:clamp(20px,5vw,44px);height:clamp(20px,5vw,44px);
+  border-bottom:1px solid rgba(174,150,102,.45);
+  border-right:1px solid rgba(174,150,102,.45);
+}
+.hero-content{text-align:center;z-index:1;padding:clamp(1rem,4vw,2rem);}
+.hero-eyebrow{
+  font-size:clamp(.5rem,.9vw,.62rem);
+  letter-spacing:clamp(4px,2vw,8px);
+  color:var(--gold);margin-bottom:clamp(1rem,3vh,2rem);opacity:.8;
+}
+.hero-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.8rem,12vw,8.5rem);
+  font-weight:300;line-height:.88;
+  letter-spacing:clamp(4px,3vw,10px);
+  margin-bottom:clamp(1.5rem,3vh,2.5rem);
+}
 .hero-title .l1{display:block;color:var(--white);}
-.hero-title .l2{display:block;color:var(--gold);font-style:italic;font-size:.6em;letter-spacing:14px;}
+.hero-title .l2{display:block;color:var(--gold);font-style:italic;font-size:.58em;letter-spacing:clamp(6px,4vw,14px);}
 .hero-title .l3{display:block;color:var(--white);font-size:.85em;}
-.hero-sub{font-size:.62rem;letter-spacing:5px;color:var(--gray);margin-bottom:3.5rem;}
-.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
-.btn-gold{padding:15px 46px;background:var(--gold);color:var(--black);border:none;font-family:'Josefin Sans',sans-serif;font-size:.68rem;letter-spacing:4px;cursor:pointer;transition:background .3s;text-decoration:none;display:inline-block;}
+.hero-sub{
+  font-size:clamp(.5rem,.9vw,.65rem);
+  letter-spacing:clamp(3px,2vw,6px);
+  color:var(--gray);margin-bottom:clamp(2rem,4vh,3.5rem);
+}
+.hero-btns{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;}
+.btn-gold{
+  padding:clamp(11px,2vh,15px) clamp(24px,5vw,46px);
+  background:var(--gold);color:var(--black);border:none;
+  font-family:'Josefin Sans',sans-serif;
+  font-size:clamp(.6rem,.9vw,.7rem);letter-spacing:clamp(2px,1vw,4px);
+  cursor:pointer;transition:background .3s;text-decoration:none;display:inline-block;
+}
 .btn-gold:hover{background:var(--gold-light);}
-.btn-outline{padding:15px 46px;background:none;border:1px solid rgba(174,150,102,0.5);color:var(--gold);font-family:'Josefin Sans',sans-serif;font-size:.68rem;letter-spacing:4px;cursor:pointer;transition:all .3s;text-decoration:none;display:inline-block;}
-.btn-outline:hover{border-color:var(--gold);background:rgba(174,150,102,0.05);}
-.scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;font-size:.52rem;letter-spacing:3px;color:var(--gray);animation:bounce 2.5s infinite;}
-.scroll-hint::after{content:'';width:1px;height:40px;background:linear-gradient(to bottom,rgba(174,150,102,0.55),transparent);}
-@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(7px);}}
+.btn-outline{
+  padding:clamp(11px,2vh,15px) clamp(24px,5vw,46px);
+  background:none;border:1px solid rgba(174,150,102,.45);color:var(--gold);
+  font-family:'Josefin Sans',sans-serif;
+  font-size:clamp(.6rem,.9vw,.7rem);letter-spacing:clamp(2px,1vw,4px);
+  cursor:pointer;transition:all .3s;text-decoration:none;display:inline-block;
+}
+.btn-outline:hover{border-color:var(--gold);background:rgba(174,150,102,.05);}
+.scroll-hint{
+  position:absolute;bottom:clamp(1rem,3vh,2.5rem);left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  font-size:.5rem;letter-spacing:3px;color:var(--gray);
+  animation:bounce 2.5s infinite;
+}
+.scroll-hint::after{content:'';width:1px;height:36px;background:linear-gradient(to bottom,rgba(174,150,102,.5),transparent);}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(8px);}}
 
-/* ── MARQUEE ── */
-.marquee-wrap{overflow:hidden;border-top:1px solid rgba(174,150,102,0.12);border-bottom:1px solid rgba(174,150,102,0.12);padding:.75rem 0;background:rgba(174,150,102,0.02);}
-.marquee-track{display:flex;gap:4rem;animation:marquee 22s linear infinite;white-space:nowrap;}
-.marquee-item{font-size:.56rem;letter-spacing:5px;color:var(--gray);display:flex;align-items:center;gap:1.5rem;flex-shrink:0;}
-.marquee-item::before{content:'✦';color:var(--gold);font-size:.45rem;}
+/* ════════ MARQUEE ════════ */
+.marquee-wrap{
+  overflow:hidden;
+  border-top:1px solid rgba(174,150,102,.1);
+  border-bottom:1px solid rgba(174,150,102,.1);
+  padding:.7rem 0;
+  background:rgba(174,150,102,.02);
+}
+.marquee-track{display:flex;gap:3rem;animation:marquee 22s linear infinite;white-space:nowrap;}
+.marquee-item{
+  font-size:clamp(.48rem,.8vw,.58rem);letter-spacing:4px;
+  color:var(--gray);display:flex;align-items:center;gap:1.2rem;flex-shrink:0;
+}
+.marquee-item::before{content:'✦';color:var(--gold);font-size:.4rem;}
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* ── SECTION SHARED ── */
-.section{padding:7rem 4rem;}
-.section-inner{max-width:1400px;margin:0 auto;}
-.s-label{font-size:.56rem;letter-spacing:6px;color:var(--gold);opacity:.8;margin-bottom:.8rem;}
-.s-heading{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,3rem);font-weight:300;letter-spacing:5px;}
+/* ════════ SECTIONS ════════ */
+.section{padding:clamp(3.5rem,8vh,7rem) clamp(1rem,5vw,4rem);}
+.section-inner{max-width:1440px;margin:0 auto;}
+.s-label{font-size:clamp(.5rem,.8vw,.58rem);letter-spacing:5px;color:var(--gold);opacity:.8;margin-bottom:.7rem;}
+.s-heading{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.6rem,4vw,3rem);
+  font-weight:300;letter-spacing:clamp(3px,2vw,5px);
+}
 .s-heading em{color:var(--gold);font-style:italic;}
 
-/* ── FEATURED ── */
-.feat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;margin-top:3.5rem;}
+/* ════════ FEATURED GRID ════════ */
+.feat-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:3px;margin-top:clamp(2rem,4vh,3.5rem);
+}
 .feat-card{position:relative;overflow:hidden;cursor:pointer;background:var(--black-card);}
 .feat-card:first-child{grid-row:span 2;}
-.feat-img{width:100%;min-height:300px;background:linear-gradient(160deg,#1c1c1c,#0d0d0d);display:flex;align-items:center;justify-content:center;font-size:7rem;transition:transform .7s cubic-bezier(.25,.46,.45,.94);}
-.feat-card:first-child .feat-img{min-height:620px;font-size:10rem;}
+.feat-img{
+  width:100%;
+  min-height:clamp(200px,35vw,340px);
+  background:linear-gradient(160deg,#1c1c1c,#0d0d0d);
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(4rem,10vw,7.5rem);
+  transition:transform .7s cubic-bezier(.25,.46,.45,.94);
+  overflow:hidden;
+}
+.feat-card:first-child .feat-img{min-height:clamp(420px,60vw,680px);}
 .feat-card:hover .feat-img{transform:scale(1.04);}
-.feat-over{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.88) 0%,transparent 55%);display:flex;flex-direction:column;justify-content:flex-end;padding:1.8rem;}
-.feat-name{font-family:'Cormorant Garamond',serif;font-size:1.2rem;letter-spacing:3px;font-weight:300;}
-.feat-price{color:var(--gold);font-size:.72rem;letter-spacing:2px;margin-top:4px;}
-.feat-tag{position:absolute;top:1rem;right:1rem;background:var(--gold);color:var(--black);font-size:.52rem;letter-spacing:2px;padding:4px 12px;}
-.feat-hover-btn{position:absolute;bottom:1.8rem;right:1.8rem;background:none;border:1px solid rgba(174,150,102,0.5);color:var(--gold);padding:7px 16px;font-family:'Josefin Sans',sans-serif;font-size:.58rem;letter-spacing:2px;cursor:pointer;transition:all .3s;opacity:0;transform:translateY(8px);}
+.feat-over{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,.88) 0%,transparent 55%);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:clamp(1rem,2vw,1.8rem);
+}
+.feat-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(.95rem,2vw,1.2rem);letter-spacing:3px;font-weight:300;
+}
+.feat-price{color:var(--gold);font-size:clamp(.62rem,1.2vw,.75rem);letter-spacing:2px;margin-top:4px;}
+.feat-tag{
+  position:absolute;top:1rem;right:1rem;
+  background:var(--gold);color:var(--black);
+  font-size:clamp(.46rem,.8vw,.54rem);letter-spacing:2px;padding:4px 10px;
+}
+.feat-hover-btn{
+  position:absolute;bottom:clamp(.8rem,2vw,1.8rem);right:clamp(.8rem,2vw,1.8rem);
+  background:none;border:1px solid rgba(174,150,102,.5);color:var(--gold);
+  padding:6px 14px;font-family:'Josefin Sans',sans-serif;
+  font-size:clamp(.52rem,.9vw,.6rem);letter-spacing:2px;cursor:pointer;
+  transition:all .3s;opacity:0;transform:translateY(8px);
+}
 .feat-card:hover .feat-hover-btn{opacity:1;transform:translateY(0);}
-.feat-hover-btn:hover{background:rgba(174,150,102,0.1);}
+.feat-hover-btn:hover{background:rgba(174,150,102,.1);}
 
-/* ── STATS ── */
-.stats-bar{border-top:1px solid rgba(174,150,102,0.1);border-bottom:1px solid rgba(174,150,102,0.1);padding:3.5rem 4rem;background:rgba(174,150,102,0.02);}
-.stats-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;text-align:center;}
-.stat-n{font-family:'Cormorant Garamond',serif;font-size:2.8rem;color:var(--gold);font-weight:300;letter-spacing:3px;}
-.stat-l{font-size:.56rem;letter-spacing:4px;color:var(--gray);margin-top:.4rem;}
+/* ════════ STATS ════════ */
+.stats-bar{
+  border-top:1px solid rgba(174,150,102,.1);
+  border-bottom:1px solid rgba(174,150,102,.1);
+  padding:clamp(2.5rem,5vh,4rem) clamp(1rem,5vw,4rem);
+  background:rgba(174,150,102,.02);
+}
+.stats-inner{
+  max-width:1000px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;text-align:center;
+}
+.stat-n{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,5vw,2.8rem);color:var(--gold);font-weight:300;letter-spacing:3px;}
+.stat-l{font-size:clamp(.48rem,.8vw,.58rem);letter-spacing:3px;color:var(--gray);margin-top:.4rem;}
 
-/* ── PHILOSOPHY ── */
-.phil-grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;}
-.phil-visual{aspect-ratio:4/5;background:linear-gradient(160deg,#181818,#0e0e0e);display:flex;align-items:center;justify-content:center;font-size:12rem;position:relative;border:1px solid rgba(174,150,102,0.07);}
-.phil-visual::before{content:'';position:absolute;inset:20px;border:1px solid rgba(174,150,102,0.07);}
-.phil-text p{font-size:.76rem;line-height:2.2;color:#aaa;letter-spacing:.5px;margin-bottom:1.5rem;}
-blockquote{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-style:italic;color:var(--gold);letter-spacing:2px;border-left:1px solid rgba(174,150,102,0.4);padding-left:1.5rem;margin:2rem 0;}
+/* ════════ PHILOSOPHY ════════ */
+.phil-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,6vw,6rem);align-items:center;}
+.phil-visual{
+  aspect-ratio:4/5;
+  background:linear-gradient(160deg,#181818,#0e0e0e);
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(5rem,15vw,12rem);
+  position:relative;border:1px solid rgba(174,150,102,.07);
+}
+.phil-visual::before{content:'';position:absolute;inset:clamp(10px,2vw,20px);border:1px solid rgba(174,150,102,.06);}
+.phil-text p{font-size:clamp(.7rem,1.2vw,.78rem);line-height:2.1;color:#aaa;letter-spacing:.5px;margin-bottom:1.2rem;}
+blockquote{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.1rem,2.5vw,1.45rem);font-style:italic;
+  color:var(--gold);letter-spacing:1px;
+  border-left:1px solid rgba(174,150,102,.4);
+  padding-left:clamp(1rem,2vw,1.5rem);margin:clamp(1rem,2vh,2rem) 0;
+}
 
-/* ── PRODUCT GRID ── */
-.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:3px;margin-top:3rem;}
-.prod-card{background:var(--black-card);cursor:pointer;position:relative;overflow:hidden;}
-.prod-img-wrap{aspect-ratio:3/4;overflow:hidden;}
-.prod-img{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:5rem;background:linear-gradient(160deg,#1c1c1c,#0f0f0f);transition:transform .6s ease;}
-.prod-card:hover .prod-img{transform:scale(1.04);}
-.prod-img img{width:100%;height:100%;object-fit:cover;}
-.prod-info{padding:1.1rem 1.3rem 0;}
-.prod-cat{font-size:.5rem;letter-spacing:3px;color:var(--gold);opacity:.7;}
-.prod-name{font-family:'Cormorant Garamond',serif;font-size:1.05rem;letter-spacing:2px;margin:4px 0;}
-.prod-price{font-size:.78rem;color:var(--gold);letter-spacing:1px;}
-.prod-orig{font-size:.65rem;color:var(--gray);text-decoration:line-through;margin-left:6px;}
-.prod-sale-badge{position:absolute;top:.8rem;left:.8rem;background:var(--gold);color:var(--black);font-size:.5rem;letter-spacing:2px;padding:3px 9px;}
-.prod-add{width:100%;background:none;border:none;border-top:1px solid rgba(174,150,102,0.18);color:var(--gold);padding:11px;font-family:'Josefin Sans',sans-serif;font-size:.58rem;letter-spacing:3px;cursor:pointer;transition:all .3s;opacity:0;transform:translateY(4px);}
-.prod-card:hover .prod-add{opacity:1;transform:translateY(0);}
-.prod-add:hover{background:rgba(174,150,102,0.07);}
+/* ════════ PRODUCT PREVIEW ════════ */
+.prod-preview-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(clamp(140px,25vw,260px),1fr));
+  gap:3px;margin-top:clamp(1.5rem,3vh,3rem);
+}
+.mini-card{background:var(--black-card);cursor:pointer;position:relative;overflow:hidden;}
+.mini-img{
+  aspect-ratio:3/4;
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(3rem,8vw,5rem);
+  background:linear-gradient(160deg,#1c1c1c,#0f0f0f);
+  transition:transform .6s ease;overflow:hidden;
+}
+.mini-card:hover .mini-img{transform:scale(1.04);}
+.mini-info{padding:clamp(.8rem,2vw,1.2rem) clamp(.8rem,2vw,1.4rem) 0;}
+.mini-cat{font-size:.5rem;letter-spacing:3px;color:var(--gold);opacity:.7;}
+.mini-name{font-family:'Cormorant Garamond',serif;font-size:clamp(.9rem,2vw,1.1rem);letter-spacing:2px;margin:4px 0;}
+.mini-price{font-size:clamp(.7rem,1.3vw,.82rem);color:var(--gold);}
+.mini-orig{font-size:.62rem;color:var(--gray);text-decoration:line-through;margin-left:5px;}
+.mini-sale{position:absolute;top:.7rem;left:.7rem;background:var(--gold);color:var(--black);font-size:.48rem;letter-spacing:2px;padding:3px 9px;}
+.mini-add{
+  width:100%;background:none;border:none;
+  border-top:1px solid rgba(174,150,102,.18);
+  color:var(--gold);padding:10px;
+  font-family:'Josefin Sans',sans-serif;font-size:.58rem;letter-spacing:3px;
+  cursor:pointer;transition:all .3s;
+  opacity:0;transform:translateY(4px);
+}
+.mini-card:hover .mini-add{opacity:1;transform:translateY(0);}
+.mini-add:hover{background:rgba(174,150,102,.07);}
+.see-all-wrap{text-align:center;margin-top:clamp(1.5rem,4vh,3rem);}
 
-/* ── NEWSLETTER ── */
-.nl-section{border-top:1px solid rgba(174,150,102,0.1);text-align:center;padding:6rem 2rem;}
-.nl-section p{font-size:.7rem;letter-spacing:2px;color:var(--gray);margin:1rem 0 2.5rem;}
-.nl-row{display:flex;max-width:480px;margin:0 auto;}
-.nl-input{flex:1;background:rgba(255,255,255,.03);border:1px solid rgba(174,150,102,.3);border-right:none;color:var(--white);padding:14px 18px;font-family:'Josefin Sans',sans-serif;font-size:.72rem;outline:none;transition:border-color .3s;letter-spacing:1px;}
+/* ════════ NEWSLETTER ════════ */
+.nl-section{
+  border-top:1px solid rgba(174,150,102,.1);
+  text-align:center;
+  padding:clamp(3rem,7vh,6rem) clamp(1rem,4vw,2rem);
+}
+.nl-section p{font-size:clamp(.62rem,1.2vw,.72rem);letter-spacing:2px;color:var(--gray);margin:.8rem 0 2rem;}
+.nl-row{
+  display:flex;max-width:480px;margin:0 auto;
+}
+.nl-input{
+  flex:1;background:rgba(255,255,255,.03);
+  border:1px solid rgba(174,150,102,.28);border-right:none;
+  color:var(--white);padding:13px 16px;
+  font-family:'Josefin Sans',sans-serif;font-size:.72rem;
+  outline:none;transition:border-color .3s;letter-spacing:1px;
+  min-width:0;
+}
 .nl-input:focus{border-color:var(--gold);}
 .nl-input::placeholder{color:var(--gray);}
-.nl-btn{background:var(--gold);color:var(--black);border:none;padding:14px 26px;font-family:'Josefin Sans',sans-serif;font-size:.62rem;letter-spacing:3px;cursor:pointer;transition:background .3s;white-space:nowrap;}
+.nl-btn{
+  background:var(--gold);color:var(--black);border:none;
+  padding:13px clamp(14px,3vw,24px);
+  font-family:'Josefin Sans',sans-serif;
+  font-size:clamp(.56rem,.9vw,.64rem);letter-spacing:2px;
+  cursor:pointer;transition:background .3s;white-space:nowrap;
+}
 .nl-btn:hover{background:var(--gold-light);}
 
-/* ── FOOTER ── */
-footer{border-top:1px solid rgba(174,150,102,0.2);padding:5rem 4rem 2rem;background:var(--black-soft);}
-.foot-grid{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:3.5rem;margin-bottom:3.5rem;}
-.foot-brand p{font-size:.68rem;line-height:1.9;color:var(--gray);max-width:260px;margin-top:.8rem;}
-.foot-col h4{font-size:.56rem;letter-spacing:5px;color:var(--gold);margin-bottom:1.4rem;opacity:.8;}
-.foot-col a{display:block;font-size:.68rem;color:var(--gray);margin-bottom:.7rem;text-decoration:none;letter-spacing:.5px;transition:color .3s;cursor:pointer;}
+/* ════════ FOOTER ════════ */
+footer{
+  border-top:1px solid rgba(174,150,102,.2);
+  padding:clamp(3rem,6vh,5rem) clamp(1rem,5vw,4rem) clamp(1.5rem,3vh,2rem);
+  background:var(--black-soft);
+}
+.foot-grid{
+  max-width:1440px;margin:0 auto;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:clamp(1.5rem,4vw,4rem);
+  margin-bottom:clamp(2rem,4vh,3.5rem);
+}
+.foot-brand p{font-size:clamp(.62rem,1.1vw,.7rem);line-height:1.9;color:var(--gray);max-width:250px;margin-top:.8rem;}
+.foot-col h4{font-size:clamp(.5rem,.8vw,.58rem);letter-spacing:5px;color:var(--gold);margin-bottom:1.3rem;opacity:.8;}
+.foot-col a{
+  display:block;font-size:clamp(.62rem,1vw,.68rem);color:var(--gray);
+  margin-bottom:.7rem;text-decoration:none;letter-spacing:.5px;transition:color .3s;cursor:pointer;
+}
 .foot-col a:hover{color:var(--gold);}
-.foot-bottom{max-width:1400px;margin:0 auto;border-top:1px solid rgba(255,255,255,.04);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
-.foot-copy{font-size:.56rem;color:var(--gray);letter-spacing:1px;}
-.foot-legal{display:flex;gap:1.4rem;flex-wrap:wrap;}
-.foot-legal a{font-size:.56rem;color:var(--gray);cursor:pointer;text-decoration:none;transition:color .3s;}
+.foot-bottom{
+  max-width:1440px;margin:0 auto;
+  border-top:1px solid rgba(255,255,255,.04);padding-top:1.5rem;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;
+}
+.foot-copy{font-size:clamp(.5rem,.8vw,.58rem);color:var(--gray);letter-spacing:1px;}
+.foot-legal{display:flex;gap:clamp(.8rem,2vw,1.4rem);flex-wrap:wrap;}
+.foot-legal a{font-size:clamp(.5rem,.8vw,.58rem);color:var(--gray);text-decoration:none;transition:color .3s;cursor:pointer;}
 .foot-legal a:hover{color:var(--gold);}
 
-/* ── AUTH MODAL ── */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:2000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px);}
+/* ════════ AUTH MODAL ════════ */
+.overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.88);
+  z-index:2000;display:none;align-items:center;justify-content:center;
+  backdrop-filter:blur(6px);padding:clamp(.8rem,3vw,1.5rem);
+}
 .overlay.open{display:flex;}
-.modal{background:var(--black-card);border:1px solid rgba(174,150,102,.22);padding:2.8rem;width:100%;max-width:440px;position:relative;box-shadow:0 0 80px rgba(174,150,102,.07);}
-.modal-x{position:absolute;top:1rem;right:1.4rem;background:none;border:none;color:var(--gray);font-size:1.5rem;cursor:pointer;transition:color .3s;}
+.modal{
+  background:var(--black-card);border:1px solid rgba(174,150,102,.2);
+  padding:clamp(1.5rem,4vw,2.8rem);width:100%;max-width:420px;
+  position:relative;box-shadow:0 0 80px rgba(174,150,102,.06);
+  max-height:90vh;overflow-y:auto;
+}
+.modal-x{position:absolute;top:.8rem;right:1.2rem;background:none;border:none;color:var(--gray);font-size:1.5rem;cursor:pointer;transition:color .3s;line-height:1;}
 .modal-x:hover{color:var(--gold);}
-.modal-title{font-family:'Cormorant Garamond',serif;font-size:1.75rem;letter-spacing:5px;font-weight:300;color:var(--gold);margin-bottom:1.8rem;text-align:center;}
-.fg{margin-bottom:1.4rem;}
-.fl{display:block;font-size:.56rem;letter-spacing:3px;color:var(--gray);margin-bottom:7px;}
-.fi{width:100%;background:rgba(255,255,255,.02);border:none;border-bottom:1px solid rgba(174,150,102,.3);color:var(--white);padding:9px 4px;font-family:'Josefin Sans',sans-serif;font-size:.82rem;outline:none;transition:border-color .3s;letter-spacing:1px;}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:1.7rem;letter-spacing:5px;font-weight:300;color:var(--gold);margin-bottom:1.6rem;text-align:center;}
+.fg{margin-bottom:1.2rem;}
+.fl{display:block;font-size:.54rem;letter-spacing:3px;color:var(--gray);margin-bottom:6px;}
+.fi{
+  width:100%;background:rgba(255,255,255,.02);border:none;
+  border-bottom:1px solid rgba(174,150,102,.28);
+  color:var(--white);padding:9px 4px;
+  font-family:'Josefin Sans',sans-serif;font-size:.82rem;
+  outline:none;transition:border-color .3s;letter-spacing:1px;
+  -webkit-appearance:none;border-radius:0;
+}
 .fi:focus{border-color:var(--gold);}
-.fb{width:100%;background:var(--gold);color:var(--black);border:none;padding:13px;font-family:'Josefin Sans',sans-serif;font-size:.68rem;letter-spacing:4px;cursor:pointer;transition:background .3s;margin-top:.3rem;}
+.fb{
+  width:100%;background:var(--gold);color:var(--black);border:none;padding:13px;
+  font-family:'Josefin Sans',sans-serif;font-size:.66rem;letter-spacing:4px;
+  cursor:pointer;transition:background .3s;
+}
 .fb:hover{background:var(--gold-light);}
-.fswitch{text-align:center;margin-top:1.3rem;font-size:.62rem;letter-spacing:1px;color:var(--gray);}
+.fswitch{text-align:center;margin-top:1.2rem;font-size:.6rem;letter-spacing:1px;color:var(--gray);}
 .fswitch a{color:var(--gold);cursor:pointer;}
-.fmsg{font-size:.65rem;text-align:center;margin-top:.8rem;letter-spacing:1px;min-height:18px;}
-.email-note{font-size:.6rem;color:var(--gray);letter-spacing:.5px;margin-top:.5rem;line-height:1.6;}
-
-/* ── COOKIE ── */
-.cookie-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(18,18,18,.98);border-top:1px solid rgba(174,150,102,.25);z-index:5000;padding:1.3rem 3rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;backdrop-filter:blur(10px);transform:translateY(100%);transition:transform .5s ease;}
-.cookie-bar.on{transform:translateY(0);}
-.cookie-bar p{font-size:.68rem;line-height:1.8;color:var(--gray);max-width:680px;}
-.cookie-bar a{color:var(--gold);text-decoration:none;}
-.cb-btns{display:flex;gap:.7rem;flex-shrink:0;flex-wrap:wrap;}
-.cb-ok{background:var(--gold);color:var(--black);border:none;padding:9px 26px;font-family:'Josefin Sans',sans-serif;font-size:.62rem;letter-spacing:3px;cursor:pointer;transition:background .3s;}
-.cb-ok:hover{background:var(--gold-light);}
-.cb-no{background:none;border:1px solid rgba(174,150,102,.3);color:var(--gray);padding:9px 18px;font-family:'Josefin Sans',sans-serif;font-size:.62rem;letter-spacing:2px;cursor:pointer;transition:all .3s;}
-.cb-no:hover{border-color:var(--gold);color:var(--gold);}
-
-/* ── TOAST ── */
-.toast{position:fixed;bottom:5rem;right:2rem;z-index:3000;background:var(--black-card);border:1px solid var(--gold);padding:.9rem 1.4rem;font-size:.65rem;letter-spacing:2px;color:var(--gold);transform:translateY(100px);opacity:0;transition:all .4s;pointer-events:none;box-shadow:0 0 28px rgba(174,150,102,.12);}
-.toast.on{transform:translateY(0);opacity:1;}
-
-/* ── LOADING SPINNER ── */
-.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(174,150,102,.3);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;}
+.fmsg{font-size:.62rem;text-align:center;margin-top:.8rem;letter-spacing:1px;min-height:18px;}
+.spinner{
+  display:inline-block;width:13px;height:13px;
+  border:2px solid rgba(174,150,102,.3);border-top-color:var(--gold);
+  border-radius:50%;animation:spin .7s linear infinite;
+  vertical-align:middle;margin-right:5px;
+}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ── RESPONSIVE ── */
+/* ════════ COOKIE ════════ */
+.cookie-bar{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(16,16,16,.98);
+  border-top:1px solid rgba(174,150,102,.22);
+  z-index:4000;padding:clamp(1rem,2vw,1.3rem) clamp(1rem,4vw,3rem);
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1.2rem;flex-wrap:wrap;
+  backdrop-filter:blur(10px);
+  transform:translateY(100%);transition:transform .5s ease;
+}
+.cookie-bar.on{transform:translateY(0);}
+.cookie-bar p{font-size:clamp(.6rem,1.1vw,.68rem);line-height:1.8;color:var(--gray);max-width:650px;}
+.cookie-bar a{color:var(--gold);text-decoration:none;}
+.cb-btns{display:flex;gap:.6rem;flex-wrap:wrap;flex-shrink:0;}
+.cb-ok{
+  background:var(--gold);color:var(--black);border:none;
+  padding:8px clamp(14px,3vw,24px);
+  font-family:'Josefin Sans',sans-serif;font-size:.6rem;letter-spacing:2px;cursor:pointer;transition:background .3s;
+}
+.cb-ok:hover{background:var(--gold-light);}
+.cb-no{
+  background:none;border:1px solid rgba(174,150,102,.28);color:var(--gray);
+  padding:8px clamp(10px,2vw,18px);
+  font-family:'Josefin Sans',sans-serif;font-size:.6rem;letter-spacing:2px;cursor:pointer;transition:all .3s;
+}
+.cb-no:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ════════ TOAST ════════ */
+.toast{
+  position:fixed;
+  bottom:clamp(1rem,3vw,2rem);right:clamp(1rem,3vw,2rem);
+  z-index:3000;background:var(--black-card);
+  border:1px solid var(--gold);
+  padding:.85rem 1.3rem;
+  font-size:clamp(.58rem,.9vw,.65rem);letter-spacing:2px;color:var(--gold);
+  transform:translateY(100px);opacity:0;transition:all .4s;pointer-events:none;
+  box-shadow:0 0 28px rgba(174,150,102,.12);
+  max-width:calc(100vw - 2rem);
+}
+.toast.on{transform:translateY(0);opacity:1;}
+
+/* ════════ RESPONSIVE ════════ */
+
+/* Tablet */
 @media(max-width:1024px){
   .feat-grid{grid-template-columns:1fr 1fr;}
-  .feat-card:first-child{grid-row:span 1;}
-  .feat-card:first-child .feat-img{min-height:380px;}
+  .feat-card:first-child{grid-row:auto;}
+  .feat-card:first-child .feat-img{min-height:clamp(280px,40vw,420px);}
   .foot-grid{grid-template-columns:1fr 1fr;}
-  .phil-grid{grid-template-columns:1fr;}
+  .phil-grid{grid-template-columns:1fr;gap:2.5rem;}
+  .phil-visual{aspect-ratio:16/9;max-height:300px;}
   .stats-inner{grid-template-columns:repeat(2,1fr);}
 }
-@media(max-width:768px){
-  .section{padding:5rem 1.5rem;}
-  header{padding:0 1.5rem;}
+
+/* Mobile */
+@media(max-width:640px){
+  :root{--hh:60px;}
   .feat-grid{grid-template-columns:1fr;}
-  .stats-bar{padding:3rem 1.5rem;}
-  footer{padding:4rem 1.5rem 2rem;}
+  .feat-card:first-child .feat-img{min-height:clamp(280px,70vw,420px);}
+  .feat-card .feat-img{min-height:clamp(200px,55vw,320px);}
   .foot-grid{grid-template-columns:1fr;}
-  .cookie-bar{padding:1.2rem 1.5rem;}
+  .foot-brand p{max-width:100%;}
+  .hero-btns{flex-direction:column;align-items:center;}
+  .btn-gold,.btn-outline{width:100%;max-width:280px;text-align:center;}
+  .stats-inner{grid-template-columns:1fr 1fr;gap:1.5rem;}
+  .nl-row{flex-direction:column;}
+  .nl-input{border-right:1px solid rgba(174,150,102,.28);border-bottom:none;}
+  .nl-btn{padding:13px;width:100%;}
+  .cookie-bar{flex-direction:column;align-items:flex-start;}
+  .cb-btns{width:100%;}
+  .cb-ok,.cb-no{flex:1;text-align:center;}
+}
+
+/* Very small */
+@media(max-width:360px){
+  .hero-title{font-size:2.4rem;}
+  .prod-preview-grid{grid-template-columns:repeat(2,1fr);}
 }
 </style>
 </head>
 <body>
 
-<header>
+<!-- HEADER -->
+<header id="mainHeader">
   <a class="logo-area" href="index.html">
     <img src="logo.png" alt="Chevalier &amp; Roth" class="logo-img"
          onerror="this.style.display='none';document.getElementById('lf').style.display='flex'">
     <div class="logo-placeholder" id="lf" style="display:none">C</div>
     <div class="logo-text">Chevalier &amp; Roth<small>MAISON DE MODE</small></div>
   </a>
-  <div class="header-right">
-    <span class="header-user" id="headerUser"></span>
-    <button class="cart-btn" onclick="location.href='cart.html'">
-      ⊡ WARENKORB <span class="cart-count" id="cartCount">0</span>
+  <div class="hdr-right">
+    <span class="hdr-user" id="hdrUser"></span>
+    <button class="cart-btn" onclick="location.href='cart.html'" aria-label="Warenkorb öffnen">
+      <span>⊡</span>
+      <span class="cart-label">WARENKORB</span>
+      <span class="cart-count" id="cartCount">0</span>
     </button>
-    <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()"
+            aria-label="Menü öffnen" aria-expanded="false" aria-controls="navOverlay">
       <span></span><span></span><span></span>
     </button>
   </div>
 </header>
 
-<nav class="nav-overlay" id="navOverlay">
-  <a class="nav-link" href="index.html">HOME</a>
-  <div class="nav-div"></div>
-  <a class="nav-link" href="#kollektion">KOLLEKTION</a>
-  <div class="nav-div"></div>
-  <a class="nav-link" href="cart.html">WARENKORB</a>
-  <div class="nav-div"></div>
-  <a class="nav-link" id="navAuthBtn" href="#" onclick="return false;">ANMELDEN</a>
-  <div class="nav-div"></div>
-  <a class="nav-link" id="navProfileBtn" href="profil.html" style="display:none">MEIN KONTO</a>
+<!-- NAV OVERLAY -->
+<nav class="nav-overlay" id="navOverlay" aria-label="Hauptnavigation" aria-hidden="true">
+  <a class="nav-item" href="index.html">HOME</a>
+  <div class="nav-divider"></div>
+  <a class="nav-item" href="kollektion.html">KOLLEKTION</a>
+  <div class="nav-divider"></div>
+  <a class="nav-item" href="cart.html">WARENKORB</a>
+  <div class="nav-divider"></div>
+  <a class="nav-item" id="navAuthBtn" href="#" onclick="return false;">ANMELDEN</a>
+  <div class="nav-divider"></div>
+  <a class="nav-item" id="navProfileBtn" href="profil.html" style="display:none">MEIN KONTO</a>
   <div class="nav-sub">
     <a href="datenschutz.html">Datenschutz</a>
     <a href="agb.html">AGB</a>
@@ -257,8 +634,8 @@ footer{border-top:1px solid rgba(174,150,102,0.2);padding:5rem 4rem 2rem;backgro
     </h1>
     <p class="hero-sub">HAUTE COUTURE · BERLIN · SEIT 2018</p>
     <div class="hero-btns">
-      <a class="btn-gold" href="#kollektion">KOLLEKTION ENTDECKEN</a>
-      <a class="btn-outline" href="#" id="heroRegBtn" onclick="openAuth('register');return false;">KONTO ERSTELLEN</a>
+      <a class="btn-gold" href="kollektion.html">KOLLEKTION ENTDECKEN</a>
+      <a class="btn-outline" href="#" id="heroRegBtn">KONTO ERSTELLEN</a>
     </div>
   </div>
   <div class="scroll-hint">ENTDECKEN</div>
@@ -283,7 +660,7 @@ footer{border-top:1px solid rgba(174,150,102,0.2);padding:5rem 4rem 2rem;backgro
 </div>
 
 <!-- FEATURED -->
-<section class="section" id="kollektion">
+<section class="section" id="featured">
   <div class="section-inner">
     <p class="s-label">AUSGEWÄHLTE STÜCKE</p>
     <h2 class="s-heading">FEATURED <em>PIECES</em></h2>
@@ -294,7 +671,7 @@ footer{border-top:1px solid rgba(174,150,102,0.2);padding:5rem 4rem 2rem;backgro
 <!-- STATS -->
 <div class="stats-bar">
   <div class="stats-inner">
-    <div><div class="stat-n">2018</div><div class="stat-l">GEGRÜNDET IN BERLIN</div></div>
+    <div><div class="stat-n">2018</div><div class="stat-l">GEGRÜNDET</div></div>
     <div><div class="stat-n">47+</div><div class="stat-l">EXKLUSIVE MODELLE</div></div>
     <div><div class="stat-n">12</div><div class="stat-l">LÄNDER WELTWEIT</div></div>
     <div><div class="stat-n">100%</div><div class="stat-l">HANDGEFERTIGT</div></div>
@@ -308,22 +685,25 @@ footer{border-top:1px solid rgba(174,150,102,0.2);padding:5rem 4rem 2rem;backgro
       <div class="phil-visual">✦</div>
       <div class="phil-text">
         <p class="s-label">UNSERE PHILOSOPHIE</p>
-        <h2 class="s-heading" style="margin-bottom:2rem">QUALITÄT OHNE<br><em>KOMPROMISSE</em></h2>
-        <p>Chevalier &amp; Roth wurde mit einer klaren Vision gegründet: Mode zu erschaffen, die nicht nur beautiful, sondern dauerhaft ist. Jedes Stück wird in kleinen Auflagen gefertigt.</p>
+        <h2 class="s-heading" style="margin-bottom:1.5rem">QUALITÄT OHNE<br><em>KOMPROMISSE</em></h2>
+        <p>Chevalier &amp; Roth wurde mit einer klaren Vision gegründet: Mode zu erschaffen, die nicht nur schön, sondern dauerhaft ist. Jedes Stück wird in kleinen Auflagen gefertigt.</p>
         <blockquote>„Wahre Eleganz ist die Ablehnung des Überflüssigen."</blockquote>
-        <p>Unsere Materialien werden direkt von europäischen Webereien bezogen. Jede Naht, jeder Knopf, jedes Detail mit derselben Hingabe.</p>
-        <a class="btn-outline" href="#kollektion" style="margin-top:2rem;display:inline-block">MEHR ENTDECKEN</a>
+        <p>Unsere Materialien werden direkt von europäischen Webereien bezogen. Jede Naht, jeder Knopf, jedes Detail mit derselben Hingabe verarbeitet.</p>
+        <a class="btn-outline" href="kollektion.html" style="margin-top:1.5rem;display:inline-block">ALLE PRODUKTE</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ALL PRODUCTS -->
-<section class="section" style="padding-top:0" id="alle">
+<!-- PRODUCT PREVIEW -->
+<section class="section" style="padding-top:0">
   <div class="section-inner">
     <p class="s-label">ALLE PRODUKTE</p>
     <h2 class="s-heading">DIE <em>KOLLEKTION</em></h2>
-    <div class="prod-grid" id="prodGrid"></div>
+    <div class="prod-preview-grid" id="prodGrid"></div>
+    <div class="see-all-wrap">
+      <a class="btn-outline" href="kollektion.html">ALLE PRODUKTE ANSEHEN</a>
+    </div>
   </div>
 </section>
 
@@ -333,7 +713,7 @@ footer{border-top:1px solid rgba(174,150,102,0.2);padding:5rem 4rem 2rem;backgro
   <h2 class="s-heading" style="margin-bottom:0">NEWSLETTER <em>ABONNIEREN</em></h2>
   <p>Exklusive Angebote, Neuheiten und Aktionscodes direkt in Ihr Postfach.</p>
   <div class="nl-row">
-    <input class="nl-input" id="nlEmail" type="email" placeholder="Ihre E-Mail-Adresse">
+    <input class="nl-input" id="nlEmail" type="email" placeholder="Ihre E-Mail-Adresse" autocomplete="email">
     <button class="nl-btn" onclick="nlSubmit()">ABONNIEREN</button>
   </div>
 </div>
@@ -343,12 +723,12 @@ footer{border-top:1px solid rgba(174,150,102,0.2);padding:5rem 4rem 2rem;backgro
   <div class="foot-grid">
     <div class="foot-brand">
       <div class="logo-text">Chevalier &amp; Roth<small>MAISON DE MODE</small></div>
-      <p>Zeitlose Luxusmode für den anspruchsvollen Geschmack. Qualität und Eleganz in jedem Detail – gefertigt in Europa seit 2018.</p>
+      <p>Zeitlose Luxusmode für den anspruchsvollen Geschmack. Qualität in jedem Detail – gefertigt in Europa seit 2018.</p>
     </div>
     <div class="foot-col">
       <h4>NAVIGATION</h4>
       <a href="index.html">Home</a>
-      <a href="#kollektion">Kollektion</a>
+      <a href="kollektion.html">Kollektion</a>
       <a href="cart.html">Warenkorb</a>
       <a href="profil.html" id="footProfileLink" style="display:none">Mein Konto</a>
       <a href="#" id="footAuthLink" onclick="openAuth('login');return false;">Anmelden</a>
@@ -367,7 +747,7 @@ footer{border-top:1px solid rgba(174,150,102,0.2);padding:5rem 4rem 2rem;backgro
       <h4>KONTAKT</h4>
       <a href="mailto:info@chevalier-roth.de">info@chevalier-roth.de</a>
       <a>+49 30 123456789</a>
-      <a>Mo–Fr: 9:00–18:00 Uhr</a>
+      <a>Mo–Fr 9:00–18:00 Uhr</a>
       <a href="impressum.html">Berlin, Deutschland</a>
     </div>
   </div>
@@ -378,7 +758,6 @@ footer{border-top:1px solid rgba(174,150,102,0.2);padding:5rem 4rem 2rem;backgro
       <a href="datenschutz.html">Datenschutz</a>
       <a href="agb.html">AGB</a>
       <a href="widerruf.html">Widerruf</a>
-      <a href="streitschlichtung.html">Streitschlichtung</a>
     </div>
   </div>
 </footer>
@@ -387,253 +766,98 @@ footer{border-top:1px solid rgba(174,150,102,0.2);padding:5rem 4rem 2rem;backgro
 <div class="overlay" id="authOverlay">
   <div class="modal">
     <button class="modal-x" onclick="closeAuth()">×</button>
-
-    <!-- LOGIN -->
     <div id="viewLogin">
       <h2 class="modal-title">ANMELDEN</h2>
-      <div class="fg">
-        <label class="fl">E-MAIL</label>
-        <input class="fi" id="liEmail" type="email" placeholder="ihre@email.de" autocomplete="email">
-      </div>
-      <div class="fg">
-        <label class="fl">PASSWORT</label>
-        <input class="fi" id="liPass" type="password" placeholder="••••••••" autocomplete="current-password">
-      </div>
+      <div class="fg"><label class="fl">E-MAIL</label><input class="fi" id="liEmail" type="email" placeholder="ihre@email.de" autocomplete="email" inputmode="email"></div>
+      <div class="fg"><label class="fl">PASSWORT</label><input class="fi" id="liPass" type="password" placeholder="••••••••" autocomplete="current-password"></div>
       <button class="fb" id="liBtn" onclick="doLogin()">EINLOGGEN</button>
       <p class="fmsg" id="liMsg"></p>
-      <p class="fswitch">Noch kein Konto? <a onclick="switchView('register')">Registrieren</a></p>
+      <p class="fswitch">Noch kein Konto? <a onclick="switchAuthView('register')">Registrieren</a></p>
     </div>
-
-    <!-- REGISTER -->
     <div id="viewRegister" style="display:none">
       <h2 class="modal-title">KONTO ERSTELLEN</h2>
-      <div class="fg">
-        <label class="fl">NAME</label>
-        <input class="fi" id="rgName" type="text" placeholder="Ihr vollständiger Name">
-      </div>
-      <div class="fg">
-        <label class="fl">E-MAIL</label>
-        <input class="fi" id="rgEmail" type="email" placeholder="ihre@email.de" autocomplete="email">
-        <p class="email-note">Eine gültige E-Mail-Adresse ist erforderlich. Sie erhalten eine Bestätigungsmail.</p>
-      </div>
-      <div class="fg">
-        <label class="fl">PASSWORT</label>
-        <input class="fi" id="rgPass" type="password" placeholder="Mindestens 8 Zeichen" autocomplete="new-password">
-      </div>
-      <div class="fg">
-        <label class="fl">PASSWORT BESTÄTIGEN</label>
-        <input class="fi" id="rgPass2" type="password" placeholder="Passwort wiederholen">
-      </div>
+      <div class="fg"><label class="fl">NAME</label><input class="fi" id="rgName" type="text" placeholder="Ihr Name" autocomplete="name"></div>
+      <div class="fg"><label class="fl">E-MAIL</label><input class="fi" id="rgEmail" type="email" placeholder="ihre@email.de" autocomplete="email" inputmode="email"></div>
+      <div class="fg"><label class="fl">PASSWORT</label><input class="fi" id="rgPass" type="password" placeholder="Mindestens 8 Zeichen" autocomplete="new-password"></div>
+      <div class="fg"><label class="fl">PASSWORT BESTÄTIGEN</label><input class="fi" id="rgPass2" type="password" placeholder="Wiederholen"></div>
       <button class="fb" id="rgBtn" onclick="doRegister()">KONTO ERSTELLEN</button>
       <p class="fmsg" id="rgMsg"></p>
-      <p class="fswitch">Bereits registriert? <a onclick="switchView('login')">Anmelden</a></p>
+      <p class="fswitch">Bereits registriert? <a onclick="switchAuthView('login')">Anmelden</a></p>
     </div>
   </div>
 </div>
 
-<!-- COOKIE BANNER -->
+<!-- COOKIE -->
 <div class="cookie-bar" id="cookieBar">
-  <p>Wir verwenden Cookies zur Verbesserung Ihres Einkaufserlebnisses. Technisch notwendige Cookies werden immer gesetzt. Mehr dazu in unserer <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
+  <p>Wir verwenden Cookies zur Verbesserung Ihres Einkaufserlebnisses. Mehr dazu in unserer <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
   <div class="cb-btns">
-    <button class="cb-no" onclick="cookieSet('min')">NUR NOTWENDIGE</button>
-    <button class="cb-ok" onclick="cookieSet('all')">ALLE AKZEPTIEREN</button>
+    <button class="cb-no" onclick="setCookie('min')">NUR NOTWENDIGE</button>
+    <button class="cb-ok" onclick="setCookie('all')">ALLE AKZEPTIEREN</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ════════════════════════════════
-//  APPWRITE CONFIG
-// ════════════════════════════════
+// ═══════════════════════════════
+//  APPWRITE
+// ═══════════════════════════════
 const AW_ENDPOINT   = "https://fra.cloud.appwrite.io/v1";
 const AW_PROJECT_ID = "6a2bef64001707bac3a9";
-const STRIPE_LINK   = "https://buy.stripe.com/DEIN_STRIPE_LINK"; // ← Stripe Link hier eintragen
+const STRIPE_LINK   = "https://buy.stripe.com/DEIN_STRIPE_LINK"; // ← hier eintragen
 
-const _client = new Appwrite.Client()
-  .setEndpoint(AW_ENDPOINT)
-  .setProject(AW_PROJECT_ID);
-const _account   = new Appwrite.Account(_client);
-const _databases = new Appwrite.Databases(_client);
-const DB_ID      = "chevalier_db";
-const COL_PRODS  = "products";
-const COL_ORDERS = "orders";
+const _client  = new Appwrite.Client()
+  .setEndpoint(AW_ENDPOINT).setProject(AW_PROJECT_ID);
+const _account = new Appwrite.Account(_client);
 
-// ════════════════════════════════
-//  LOCAL PRODUCTS FALLBACK
-// ════════════════════════════════
-let products = [
+// ═══════════════════════════════
+//  DATA
+// ═══════════════════════════════
+let products = JSON.parse(localStorage.getItem('crProducts') || JSON.stringify([
   {id:"p1",emoji:"👗",name:"Abendkleid Noir",cat:"DAMEN",price:389,origPrice:389,link:"produkt-1.html"},
   {id:"p2",emoji:"🥿",name:"Klassische Pumps",cat:"DAMEN",price:229,origPrice:229,link:"produkt-2.html"},
   {id:"p3",emoji:"👜",name:"Leder Clutch",cat:"ACCESSOIRES",price:159,origPrice:159,link:"produkt-3.html"},
   {id:"p4",emoji:"🧥",name:"Cashmere Mantel",cat:"HERREN",price:649,origPrice:649,link:"#"},
   {id:"p5",emoji:"👔",name:"Seidenkrawatte",cat:"HERREN",price:89,origPrice:89,link:"#"},
   {id:"p6",emoji:"⌚",name:"Goldene Uhr",cat:"ACCESSOIRES",price:1290,origPrice:1290,link:"#"},
-];
+]));
+
+const globalDisc = parseFloat(localStorage.getItem('crDiscount')||'0');
+if(globalDisc>0) products.forEach(p=>{ p.price=Math.round(p.origPrice*(1-globalDisc/100)); });
 
 let cart        = JSON.parse(localStorage.getItem('crCart')||'[]');
-let globalDisc  = parseFloat(localStorage.getItem('crDiscount')||'0');
 let promoCodes  = JSON.parse(localStorage.getItem('crPromoCodes')||'[{"code":"WELCOME10","percent":10}]');
-let menuOpen    = false;
 let currentUser = null;
+let menuOpen    = false;
 
-// apply discount
-products.forEach(p => {
-  if(globalDisc>0) p.price = Math.round(p.origPrice*(1-globalDisc/100));
-});
-
-// ════════════════════════════════
-//  APPWRITE AUTH
-// ════════════════════════════════
-async function initUser(){
-  try {
-    currentUser = await _account.get();
-    updateUserUI();
-  } catch(e){
-    currentUser = null;
-    updateUserUI();
-  }
-}
-
-function updateUserUI(){
-  const hu  = document.getElementById('headerUser');
-  const nab = document.getElementById('navAuthBtn');
-  const npb = document.getElementById('navProfileBtn');
-  const fal = document.getElementById('footAuthLink');
-  const fpl = document.getElementById('footProfileLink');
+// ═══════════════════════════════
+//  INIT
+// ═══════════════════════════════
+async function init(){
+  try{ currentUser = await _account.get(); }catch(e){ currentUser=null; }
+  updateUserUI();
+  updateCartCount();
+  renderFeatured();
+  renderProducts();
+  initCookie();
+  // Scroll effect
+  window.addEventListener('scroll',()=>{
+    document.getElementById('mainHeader').classList.toggle('scrolled',window.scrollY>10);
+  },{passive:true});
+  // Hero register button
   const hrb = document.getElementById('heroRegBtn');
-
   if(currentUser){
-    hu.textContent = currentUser.name ? currentUser.name.split(' ')[0].toUpperCase() : 'KONTO';
-    hu.style.display = 'block';
-    nab.textContent = 'ABMELDEN';
-    nab.onclick = (e)=>{ e.preventDefault(); doLogout(); };
-    if(npb){ npb.style.display='block'; }
-    fal.textContent = 'Abmelden';
-    fal.onclick = (e)=>{ e.preventDefault(); doLogout(); };
-    if(fpl) fpl.style.display = 'block';
-    if(hrb){ hrb.textContent='MEIN KONTO'; hrb.href='profil.html'; hrb.onclick=null; }
+    hrb.textContent='MEIN KONTO'; hrb.href='profil.html';
   } else {
-    hu.style.display = 'none';
-    nab.textContent = 'ANMELDEN';
-    nab.onclick = (e)=>{ e.preventDefault(); openAuth('login'); };
-    if(npb) npb.style.display = 'none';
-    fal.textContent = 'Anmelden';
-    fal.onclick = (e)=>{ e.preventDefault(); openAuth('login'); };
-    if(fpl) fpl.style.display = 'none';
-    if(hrb){ hrb.textContent='KONTO ERSTELLEN'; hrb.href='#'; hrb.onclick=(e)=>{ e.preventDefault(); openAuth('register'); }; }
+    hrb.textContent='KONTO ERSTELLEN';
+    hrb.href='#';
+    hrb.addEventListener('click',e=>{ e.preventDefault(); openAuth('register'); });
   }
 }
 
-async function doLogin(){
-  const email = document.getElementById('liEmail').value.trim();
-  const pass  = document.getElementById('liPass').value;
-  const msg   = document.getElementById('liMsg');
-  const btn   = document.getElementById('liBtn');
-  if(!email||!pass){ msg.style.color='#f44336'; msg.textContent='Bitte alle Felder ausfüllen'; return; }
-  btn.innerHTML = '<span class="spinner"></span>ANMELDEN...';
-  btn.disabled = true;
-  try {
-    await _account.createEmailPasswordSession(email, pass);
-    currentUser = await _account.get();
-    msg.style.color='#4CAF50'; msg.textContent='✓ Willkommen zurück!';
-    setTimeout(()=>{ closeAuth(); updateUserUI(); showToast('Willkommen, '+currentUser.name+'! ✦'); },700);
-  } catch(e){
-    msg.style.color='#f44336';
-    if(e.code===401) msg.textContent='✗ E-Mail oder Passwort falsch';
-    else if(e.code===429) msg.textContent='✗ Zu viele Versuche. Bitte warten.';
-    else msg.textContent='✗ Fehler: '+e.message;
-  } finally {
-    btn.innerHTML='EINLOGGEN'; btn.disabled=false;
-  }
-}
-
-async function doRegister(){
-  const name  = document.getElementById('rgName').value.trim();
-  const email = document.getElementById('rgEmail').value.trim();
-  const pass  = document.getElementById('rgPass').value;
-  const pass2 = document.getElementById('rgPass2').value;
-  const msg   = document.getElementById('rgMsg');
-  const btn   = document.getElementById('rgBtn');
-  if(!name||!email||!pass||!pass2){ msg.style.color='#f44336'; msg.textContent='Bitte alle Felder ausfüllen'; return; }
-  if(pass!==pass2){ msg.style.color='#f44336'; msg.textContent='✗ Passwörter stimmen nicht überein'; return; }
-  if(pass.length<8){ msg.style.color='#f44336'; msg.textContent='✗ Passwort min. 8 Zeichen'; return; }
-  // basic email format check
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ msg.style.color='#f44336'; msg.textContent='✗ Ungültige E-Mail-Adresse'; return; }
-  btn.innerHTML='<span class="spinner"></span>KONTO ERSTELLEN...'; btn.disabled=true;
-  try {
-    await _account.create(Appwrite.ID.unique(), email, pass, name);
-    await _account.createEmailPasswordSession(email, pass);
-    currentUser = await _account.get();
-    msg.style.color='#4CAF50'; msg.textContent='✓ Konto erfolgreich erstellt!';
-    setTimeout(()=>{ closeAuth(); updateUserUI(); showToast('Willkommen, '+name+'! ✦'); },700);
-  } catch(e){
-    msg.style.color='#f44336';
-    if(e.code===409) msg.textContent='✗ Diese E-Mail ist bereits registriert';
-    else if(e.code===400) msg.textContent='✗ Ungültige E-Mail-Adresse';
-    else msg.textContent='✗ Fehler: '+e.message;
-  } finally {
-    btn.innerHTML='KONTO ERSTELLEN'; btn.disabled=false;
-  }
-}
-
-async function doLogout(){
-  try { await _account.deleteSession('current'); } catch(e){}
-  currentUser = null;
-  updateUserUI(); closeMenu();
-  showToast('Sie wurden abgemeldet');
-}
-
-// ════════════════════════════════
-//  UI HELPERS
-// ════════════════════════════════
-function openAuth(view){
-  document.getElementById('authOverlay').classList.add('open');
-  switchView(view);
-  closeMenu();
-}
-function closeAuth(){ document.getElementById('authOverlay').classList.remove('open'); }
-function switchView(v){
-  document.getElementById('viewLogin').style.display    = v==='login'    ? 'block':'none';
-  document.getElementById('viewRegister').style.display = v==='register' ? 'block':'none';
-  document.getElementById('liMsg').textContent = '';
-  document.getElementById('rgMsg').textContent = '';
-}
-
-function toggleMenu(){
-  menuOpen=!menuOpen;
-  document.getElementById('hamburger').classList.toggle('open',menuOpen);
-  document.getElementById('navOverlay').classList.toggle('open',menuOpen);
-  document.body.style.overflow=menuOpen?'hidden':'';
-}
-function closeMenu(){
-  menuOpen=false;
-  document.getElementById('hamburger').classList.remove('open');
-  document.getElementById('navOverlay').classList.remove('open');
-  document.body.style.overflow='';
-}
-
-function showToast(m){
-  const t=document.getElementById('toast');
-  t.textContent=m; t.classList.add('on');
-  setTimeout(()=>t.classList.remove('on'),3200);
-}
-
-// ════════════════════════════════
-//  CART
-// ════════════════════════════════
-function saveCart(){ localStorage.setItem('crCart',JSON.stringify(cart)); updateCount(); }
-function updateCount(){ document.getElementById('cartCount').textContent=cart.reduce((s,i)=>s+i.qty,0); }
-function addToCart(pid){
-  const p=products.find(x=>x.id===pid); if(!p) return;
-  const ex=cart.find(x=>x.id===pid);
-  if(ex) ex.qty++; else cart.push({id:p.id,name:p.name,emoji:p.emoji,price:p.price,origPrice:p.origPrice,qty:1});
-  saveCart(); showToast(p.name+' hinzugefügt ✦');
-}
-
-// ════════════════════════════════
+// ═══════════════════════════════
 //  RENDER
-// ════════════════════════════════
+// ═══════════════════════════════
 function renderFeatured(){
   document.getElementById('featGrid').innerHTML = products.slice(0,3).map(p=>`
     <div class="feat-card" onclick="location.href='${p.link}'">
@@ -649,45 +873,199 @@ function renderFeatured(){
 
 function renderProducts(){
   document.getElementById('prodGrid').innerHTML = products.map(p=>`
-    <div class="prod-card" onclick="location.href='${p.link}'">
-      ${globalDisc>0?`<div class="prod-sale-badge">−${globalDisc}%</div>`:''}
-      <div class="prod-img-wrap">
-        <div class="prod-img">${p.emoji}</div>
-      </div>
-      <div class="prod-info">
-        <div class="prod-cat">${p.cat}</div>
-        <div class="prod-name">${p.name}</div>
-        <div style="padding-bottom:1rem">
-          <span class="prod-price">€ ${p.price.toLocaleString('de-DE')}</span>
-          ${globalDisc>0?`<span class="prod-orig">€ ${p.origPrice}</span>`:''}
+    <div class="mini-card" onclick="location.href='${p.link}'">
+      ${globalDisc>0?`<div class="mini-sale">−${globalDisc}%</div>`:''}
+      <div class="mini-img">${p.emoji}</div>
+      <div class="mini-info">
+        <div class="mini-cat">${p.cat}</div>
+        <div class="mini-name">${p.name}</div>
+        <div>
+          <span class="mini-price">€ ${p.price.toLocaleString('de-DE')}</span>
+          ${globalDisc>0?`<span class="mini-orig">€ ${p.origPrice}</span>`:''}
         </div>
       </div>
-      <button class="prod-add" onclick="event.stopPropagation();addToCart('${p.id}')">+ IN DEN WARENKORB</button>
+      <button class="mini-add" onclick="event.stopPropagation();addToCart('${p.id}')">+ IN DEN WARENKORB</button>
     </div>`).join('');
 }
 
-// ════════════════════════════════
+// ═══════════════════════════════
+//  CART
+// ═══════════════════════════════
+function addToCart(id){
+  const p=products.find(x=>x.id===id); if(!p)return;
+  const ex=cart.find(x=>x.id===id);
+  if(ex) ex.qty++; else cart.push({id:p.id,name:p.name,emoji:p.emoji,cat:p.cat,price:p.price,origPrice:p.origPrice,qty:1});
+  localStorage.setItem('crCart',JSON.stringify(cart));
+  updateCartCount();
+  showToast(p.name+' hinzugefügt ✦');
+}
+function updateCartCount(){
+  document.getElementById('cartCount').textContent=cart.reduce((s,i)=>s+i.qty,0);
+}
+
+// ═══════════════════════════════
+//  MENU
+// ═══════════════════════════════
+function toggleMenu(){
+  menuOpen=!menuOpen;
+  const ham=document.getElementById('hamburger');
+  const nav=document.getElementById('navOverlay');
+  ham.classList.toggle('open',menuOpen);
+  ham.setAttribute('aria-expanded',String(menuOpen));
+  nav.classList.toggle('open',menuOpen);
+  nav.setAttribute('aria-hidden',String(!menuOpen));
+  document.body.style.overflow=menuOpen?'hidden':'';
+}
+function closeMenu(){
+  menuOpen=false;
+  const ham=document.getElementById('hamburger');
+  const nav=document.getElementById('navOverlay');
+  ham.classList.remove('open');
+  ham.setAttribute('aria-expanded','false');
+  nav.classList.remove('open');
+  nav.setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+}
+// Tap outside nav to close
+document.getElementById('navOverlay').addEventListener('click',function(e){
+  if(e.target===this) closeMenu();
+});
+
+// ═══════════════════════════════
+//  USER UI
+// ═══════════════════════════════
+function updateUserUI(){
+  const hu  = document.getElementById('hdrUser');
+  const nab = document.getElementById('navAuthBtn');
+  const npb = document.getElementById('navProfileBtn');
+  const fal = document.getElementById('footAuthLink');
+  const fpl = document.getElementById('footProfileLink');
+  if(currentUser){
+    const name=(currentUser.name||'KONTO').split(' ')[0].toUpperCase();
+    hu.textContent=name; hu.style.display='block';
+    nab.textContent='ABMELDEN';
+    nab.onclick=e=>{e.preventDefault();doLogout();};
+    if(npb)npb.style.display='block';
+    fal.textContent='Abmelden';
+    fal.onclick=e=>{e.preventDefault();doLogout();};
+    if(fpl)fpl.style.display='block';
+  } else {
+    hu.style.display='none';
+    nab.textContent='ANMELDEN';
+    nab.onclick=e=>{e.preventDefault();openAuth('login');};
+    if(npb)npb.style.display='none';
+    fal.textContent='Anmelden';
+    fal.onclick=e=>{e.preventDefault();openAuth('login');};
+    if(fpl)fpl.style.display='none';
+  }
+}
+
+// ═══════════════════════════════
+//  AUTH
+// ═══════════════════════════════
+function openAuth(v){
+  document.getElementById('authOverlay').classList.add('open');
+  switchAuthView(v||'login');
+  closeMenu();
+}
+function closeAuth(){ document.getElementById('authOverlay').classList.remove('open'); }
+function switchAuthView(v){
+  document.getElementById('viewLogin').style.display    = v==='login'    ?'block':'none';
+  document.getElementById('viewRegister').style.display = v==='register' ?'block':'none';
+  document.getElementById('liMsg').textContent='';
+  document.getElementById('rgMsg').textContent='';
+}
+
+async function doLogin(){
+  const email=document.getElementById('liEmail').value.trim();
+  const pass =document.getElementById('liPass').value;
+  const msg  =document.getElementById('liMsg');
+  const btn  =document.getElementById('liBtn');
+  if(!email||!pass){msg.style.color='#f44336';msg.textContent='Bitte alle Felder ausfüllen';return;}
+  btn.innerHTML='<span class="spinner"></span>ANMELDEN…';btn.disabled=true;
+  try{
+    await _account.createEmailPasswordSession(email,pass);
+    currentUser=await _account.get();
+    msg.style.color='#4CAF50';msg.textContent='✓ Willkommen zurück!';
+    setTimeout(()=>{closeAuth();updateUserUI();showToast('Willkommen, '+currentUser.name+'! ✦');},700);
+  }catch(e){
+    msg.style.color='#f44336';
+    if(e.code===401)msg.textContent='✗ E-Mail oder Passwort falsch';
+    else if(e.code===429)msg.textContent='✗ Zu viele Versuche. Bitte warten.';
+    else msg.textContent='✗ Fehler: '+e.message;
+  }finally{btn.innerHTML='EINLOGGEN';btn.disabled=false;}
+}
+
+async function doRegister(){
+  const name =document.getElementById('rgName').value.trim();
+  const email=document.getElementById('rgEmail').value.trim();
+  const pass =document.getElementById('rgPass').value;
+  const pass2=document.getElementById('rgPass2').value;
+  const msg  =document.getElementById('rgMsg');
+  const btn  =document.getElementById('rgBtn');
+  if(!name||!email||!pass||!pass2){msg.style.color='#f44336';msg.textContent='Bitte alle Felder ausfüllen';return;}
+  if(pass!==pass2){msg.style.color='#f44336';msg.textContent='✗ Passwörter stimmen nicht überein';return;}
+  if(pass.length<8){msg.style.color='#f44336';msg.textContent='✗ Mindestens 8 Zeichen';return;}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg.style.color='#f44336';msg.textContent='✗ Ungültige E-Mail-Adresse';return;}
+  btn.innerHTML='<span class="spinner"></span>ERSTELLEN…';btn.disabled=true;
+  try{
+    await _account.create(Appwrite.ID.unique(),email,pass,name);
+    await _account.createEmailPasswordSession(email,pass);
+    currentUser=await _account.get();
+    msg.style.color='#4CAF50';msg.textContent='✓ Konto erfolgreich erstellt!';
+    setTimeout(()=>{closeAuth();updateUserUI();showToast('Willkommen, '+name+'! ✦');},700);
+  }catch(e){
+    msg.style.color='#f44336';
+    if(e.code===409)msg.textContent='✗ Diese E-Mail ist bereits registriert';
+    else if(e.code===400)msg.textContent='✗ Ungültige E-Mail-Adresse';
+    else msg.textContent='✗ Fehler: '+e.message;
+  }finally{btn.innerHTML='KONTO ERSTELLEN';btn.disabled=false;}
+}
+
+async function doLogout(){
+  try{await _account.deleteSession('current');}catch(e){}
+  currentUser=null;updateUserUI();closeMenu();
+  showToast('Sie wurden abgemeldet');
+}
+
+// ═══════════════════════════════
 //  NEWSLETTER
-// ════════════════════════════════
+// ═══════════════════════════════
 function nlSubmit(){
   const v=document.getElementById('nlEmail').value.trim();
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){ showToast('Bitte gültige E-Mail eingeben'); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){showToast('Bitte gültige E-Mail eingeben');return;}
   showToast('Vielen Dank für Ihre Anmeldung! ✦');
   document.getElementById('nlEmail').value='';
 }
 
-// ════════════════════════════════
+// ═══════════════════════════════
 //  COOKIE
-// ════════════════════════════════
-function cookieSet(v){ localStorage.setItem('crCookies',v); document.getElementById('cookieBar').classList.remove('on'); }
-function initCookie(){ if(!localStorage.getItem('crCookies')) setTimeout(()=>document.getElementById('cookieBar').classList.add('on'),1600); }
+// ═══════════════════════════════
+function setCookie(v){
+  localStorage.setItem('crCookies',v);
+  document.getElementById('cookieBar').classList.remove('on');
+}
+function initCookie(){
+  if(!localStorage.getItem('crCookies'))
+    setTimeout(()=>document.getElementById('cookieBar').classList.add('on'),1800);
+}
 
-// ════════════════════════════════
-//  INIT
-// ════════════════════════════════
-document.getElementById('authOverlay').addEventListener('click',function(e){ if(e.target===this) closeAuth(); });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeAuth(); });
-updateCount(); renderFeatured(); renderProducts(); initCookie(); initUser();
+// ═══════════════════════════════
+//  TOAST
+// ═══════════════════════════════
+function showToast(m){
+  const t=document.getElementById('toast');
+  t.textContent=m;t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'),3200);
+}
+
+// ═══════════════════════════════
+//  EVENTS
+// ═══════════════════════════════
+document.getElementById('authOverlay').addEventListener('click',function(e){if(e.target===this)closeAuth();});
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){closeAuth();closeMenu();} });
+
+init();
 </script>
 </body>
 </html>
