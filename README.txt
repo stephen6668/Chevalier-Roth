@@ -23,3 +23,15 @@ style.css = komplettes Design
 cr-store.js = Produkt-/Shopdaten
 shop.js = Shop-Funktionen
 logo.PNG = Logo
+
+
+PROFESSIONELLES UPDATE
+-----------------------
+- Produktseiten mit Material, Pflege, Passform und Größentabelle
+- Responsive Mobile-Navigation
+- Gruppierter Footer: Shop / Service / Rechtliches
+- Sichtbarer Link zurück zur Startseite
+- Vertrauenshinweise für Rückgabe, Versand und Zahlung
+- Kundenbewertungsbereich ohne erfundene Bewertungen
+- Luxemburg-Storytelling auf der Startseite
+- Admin-Felder für Material, Passform und Pflege
