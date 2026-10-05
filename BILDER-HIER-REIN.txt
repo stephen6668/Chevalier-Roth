@@ -1,0 +1,39 @@
+CHEVALIER & ROTH – BILDER
+
+Lege die Produktfotos direkt in diesen Ordner, neben index.html.
+Empfehlung: JPG oder WebP, Hochformat 4:5, mindestens 1200 x 1500 px.
+
+Startseite:
+hero-home.jpg
+
+Abendkleid Noir:
+abendkleid-noir-01.jpg
+abendkleid-noir-02.jpg
+abendkleid-noir-03.jpg
+
+Klassische Pumps:
+klassische-pumps-01.jpg
+klassische-pumps-02.jpg
+klassische-pumps-03.jpg
+
+Leder Clutch:
+leder-clutch-01.jpg
+leder-clutch-02.jpg
+leder-clutch-03.jpg
+
+Signature Polo Navy:
+signature-polo-navy-01.jpg
+signature-polo-navy-02.jpg
+signature-polo-navy-03.jpg
+
+Heritage Half-Zip Beige:
+heritage-halfzip-beige-01.jpg
+heritage-halfzip-beige-02.jpg
+heritage-halfzip-beige-03.jpg
+
+Tailored Trouser Stone:
+tailored-trouser-stone-01.jpg
+tailored-trouser-stone-02.jpg
+tailored-trouser-stone-03.jpg
+
+Für neue Produkte kannst du die Dateinamen im Admin-Bereich selbst festlegen.
