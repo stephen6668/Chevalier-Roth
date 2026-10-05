@@ -46,4 +46,5 @@ function load(){
  add.onclick=()=>{if(!sel){Shop.toast('Bitte zuerst eine Größe wählen.');return}let c=CR.getCart();let ex=c.find(x=>x.id===p.id&&x.size===sel);if(ex)ex.qty++;else c.push({id:p.id,size:sel,qty:1});CR.saveCart(c);Shop.updateCartCount();Shop.toast('Zum Warenkorb hinzugefügt.')}
 }
 document.addEventListener('DOMContentLoaded',load);
-</script></body></html>
+</script><script src="cr-nav.js"></script>
+</body></html>
