@@ -1,42 +1,41 @@
 
-const CR = (() => {
-  const DEFAULT_CODES = [
-    {code:'WELCOME10', percent:10, active:true, starts:null, expires:null, maxUses:100, uses:0, minOrder:0, products:[], categories:[], oncePerCustomer:false}
+const CRStore = (() => {
+  const defaults = [
+    {id:'p1',name:'Signature Polo',category:'Men',price:90,salePrice:null,sizes:['S','M','L','XL'],colors:['Navy','White','Beige'],stock:24,sku:'CR-POLO-001',badge:'NEW',active:true,images:[],description:'A refined polo with clean proportions and understated Chevalier & Roth character.'},
+    {id:'p2',name:'Heritage Half-Zip',category:'Men',price:120,salePrice:null,sizes:['S','M','L','XL'],colors:['Beige','Navy','Dark Brown'],stock:18,sku:'CR-HZ-002',badge:'BESTSELLER',active:true,images:[],description:'An elegant half-zip designed for a calm old-money wardrobe.'},
+    {id:'p3',name:'Tailored Trouser',category:'Men',price:100,salePrice:null,sizes:['30','32','34','36'],colors:['Stone','Black','Navy'],stock:16,sku:'CR-TR-003',badge:'',active:true,images:[],description:'Comfortable tailored trousers with a clean leg and refined drape.'},
+    {id:'p4',name:'Maison Knit Top',category:'Women',price:95,salePrice:79,sizes:['XS','S','M','L'],colors:['Cream','Black','Brown'],stock:12,sku:'CR-WT-004',badge:'SALE',active:true,images:[],description:'A minimalist knit top with polished lines and a premium visual language.'}
   ];
-  const defaults = {products:null,codes:DEFAULT_CODES,cart:[],orders:[],customer:null,consent:null};
-
-  function get(key, fallback){try{return JSON.parse(localStorage.getItem('cr_'+key)) ?? fallback}catch{return fallback}}
-  function set(key, value){localStorage.setItem('cr_'+key, JSON.stringify(value))}
-  async function products(){
-    const local=get('products',null);
-    if(local) return local;
-    const data=await fetch('data/products.json').then(r=>r.json());
-    set('products',data); return data;
-  }
-  function codes(){return get('codes',DEFAULT_CODES)}
-  function cart(){return get('cart',[])}
-  function saveCart(v){set('cart',v);window.dispatchEvent(new Event('cr-cart'))}
-  function orders(){return get('orders',[])}
-  function saveOrders(v){set('orders',v)}
-  function money(v){return new Intl.NumberFormat('de-LU',{style:'currency',currency:'EUR'}).format(v)}
-  function sanitize(s=''){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-  function effectivePrice(p){return p.salePrice && p.salePrice < p.price ? p.salePrice : p.price}
-  function validateCode(input, subtotal, items){
-    const c=codes().find(x=>x.code.toUpperCase()===String(input).trim().toUpperCase());
-    if(!c) return {ok:false,msg:'Ungültiger Rabattcode.'};
+  const defaultCodes=[{code:'WELCOME10',percent:10,active:true,start:'',end:'',maxUses:100,uses:0,minOrder:0,products:[],categories:[]}];
+  const get=(k,d)=>{try{const v=localStorage.getItem('cr_'+k);return v?JSON.parse(v):d}catch{return d}};
+  const set=(k,v)=>localStorage.setItem('cr_'+k,JSON.stringify(v));
+  const products=()=>get('products',defaults);
+  const saveProducts=v=>set('products',v);
+  const codes=()=>get('codes',defaultCodes);
+  const saveCodes=v=>set('codes',v);
+  const cart=()=>get('cart',[]);
+  const saveCart=v=>{set('cart',v);window.dispatchEvent(new Event('cartchange'))};
+  const orders=()=>get('orders',[]);
+  const saveOrders=v=>set('orders',v);
+  const price=p=>p.salePrice && Number(p.salePrice)<Number(p.price)?Number(p.salePrice):Number(p.price);
+  const money=v=>new Intl.NumberFormat('de-LU',{style:'currency',currency:'EUR'}).format(Number(v)||0);
+  const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  function validateCode(input,subtotal,lines){
+    const code=String(input||'').trim().toUpperCase(), c=codes().find(x=>x.code===code);
+    if(!c)return {ok:false,msg:'Invalid code',discount:0};
     const now=new Date();
-    if(!c.active) return {ok:false,msg:'Dieser Code ist deaktiviert.'};
-    if(c.starts && now < new Date(c.starts)) return {ok:false,msg:'Dieser Code ist noch nicht aktiv.'};
-    if(c.expires && now > new Date(c.expires+'T23:59:59')) return {ok:false,msg:'Dieser Code ist abgelaufen.'};
-    if(c.maxUses && c.uses>=c.maxUses) return {ok:false,msg:'Nutzungslimit erreicht.'};
-    if(subtotal < Number(c.minOrder||0)) return {ok:false,msg:'Mindestbestellwert nicht erreicht.'};
-    let eligible = subtotal;
+    if(!c.active)return {ok:false,msg:'Code inactive',discount:0};
+    if(c.start && now<new Date(c.start+'T00:00:00'))return {ok:false,msg:'Code not active yet',discount:0};
+    if(c.end && now>new Date(c.end+'T23:59:59'))return {ok:false,msg:'Code expired',discount:0};
+    if(c.maxUses && c.uses>=c.maxUses)return {ok:false,msg:'Usage limit reached',discount:0};
+    if(subtotal<Number(c.minOrder||0))return {ok:false,msg:'Minimum order value not reached',discount:0};
+    let eligible=subtotal;
     if((c.products||[]).length || (c.categories||[]).length){
-      eligible=items.filter(i=>(c.products||[]).includes(i.product.id)||(c.categories||[]).includes(i.product.category))
-                    .reduce((s,i)=>s+effectivePrice(i.product)*i.qty,0);
-      if(!eligible) return {ok:false,msg:'Code gilt nicht für diese Produkte.'};
+      eligible=lines.filter(x=>(c.products||[]).includes(x.product.id)||(c.categories||[]).includes(x.product.category))
+                    .reduce((s,x)=>s+price(x.product)*x.qty,0);
+      if(!eligible)return {ok:false,msg:'Code is not valid for these products',discount:0};
     }
-    return {ok:true,code:c,discount:eligible*(c.percent/100),msg:`${c.percent}% Rabatt angewendet.`};
+    return {ok:true,msg:`${c.percent}% applied`,discount:eligible*(Number(c.percent)/100),code:c};
   }
-  return {get,set,products,codes,cart,saveCart,orders,saveOrders,money,sanitize,effectivePrice,validateCode};
+  return {products,saveProducts,codes,saveCodes,cart,saveCart,orders,saveOrders,price,money,esc,validateCode,get,set};
 })();
