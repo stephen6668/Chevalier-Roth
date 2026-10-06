@@ -1,5 +1,16 @@
-# Sicherheit des Admin-Bereichs
+# Security
 
-Diese GitHub-Pages-Version ist vollständig statisch. Der Admin-Login läuft daher im Browser und kann technisch von jemandem mit Entwicklerkenntnissen umgangen werden. Nutze ihn nur als einfachen Zugangsschutz während Entwicklung/Demo.
+Never commit:
+- private API keys
+- payment provider secrets
+- admin passwords
+- database credentials
 
-Für einen echten Onlineshop sollten Admin-Login, Produktdaten, Rabattcodes, Bestellungen und Bild-Uploads serverseitig gespeichert und geschützt werden. Die bestehende Appwrite-Idee ist dafür besser geeignet.
+GitHub Pages serves all repository frontend files publicly. Any true admin authentication and protected business logic must be enforced by an external backend.
+
+For production, use an external backend and server-side validation for:
+- prices
+- discounts
+- stock
+- orders
+- payment state

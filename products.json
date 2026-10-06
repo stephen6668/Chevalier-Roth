@@ -1,0 +1,114 @@
+[
+  {
+    "id": "cr-polo",
+    "name": "Signature Polo",
+    "category": "Men",
+    "price": 90,
+    "salePrice": null,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colors": [
+      "Navy",
+      "White",
+      "Beige"
+    ],
+    "stock": 24,
+    "sku": "CR-POLO-001",
+    "status": "available",
+    "badge": "NEW",
+    "active": true,
+    "images": [
+      "assets/img/product-placeholder-1.svg",
+      "assets/img/product-placeholder-2.svg"
+    ],
+    "description": "A refined polo with clean proportions, understated branding and a timeless everyday silhouette."
+  },
+  {
+    "id": "cr-halfzip",
+    "name": "Heritage Half-Zip",
+    "category": "Men",
+    "price": 120,
+    "salePrice": null,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colors": [
+      "Beige",
+      "Navy",
+      "Dark Brown"
+    ],
+    "stock": 18,
+    "sku": "CR-HZ-002",
+    "status": "available",
+    "badge": "BESTSELLER",
+    "active": true,
+    "images": [
+      "assets/img/product-placeholder-2.svg",
+      "assets/img/product-placeholder-3.svg"
+    ],
+    "description": "A soft, elegant half-zip designed for a relaxed old-money wardrobe."
+  },
+  {
+    "id": "cr-trouser",
+    "name": "Tailored Trouser",
+    "category": "Men",
+    "price": 100,
+    "salePrice": null,
+    "sizes": [
+      "30",
+      "32",
+      "34",
+      "36"
+    ],
+    "colors": [
+      "Stone",
+      "Black",
+      "Navy"
+    ],
+    "stock": 16,
+    "sku": "CR-TR-003",
+    "status": "available",
+    "badge": "",
+    "active": true,
+    "images": [
+      "assets/img/product-placeholder-3.svg",
+      "assets/img/product-placeholder-4.svg"
+    ],
+    "description": "Comfortable tailored trousers with a clean leg and elegant drape."
+  },
+  {
+    "id": "cr-top",
+    "name": "Maison Knit Top",
+    "category": "Women",
+    "price": 95,
+    "salePrice": 79,
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L"
+    ],
+    "colors": [
+      "Cream",
+      "Black",
+      "Brown"
+    ],
+    "stock": 12,
+    "sku": "CR-WT-004",
+    "status": "available",
+    "badge": "SALE",
+    "active": true,
+    "images": [
+      "assets/img/product-placeholder-4.svg",
+      "assets/img/product-placeholder-1.svg"
+    ],
+    "description": "A minimalist knit top with a polished neckline and refined structure."
+  }
+]
